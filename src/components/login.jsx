@@ -8,12 +8,12 @@ class Login extends Component{
         super();
         this.state={
             email:'',
-            password:''
+            password:'',
+            isAuth:false
         }
     }
 
     onChange = event =>  {
-        // console.log(event.target.value)
         this.setState({[event.target.name]:event.target.value})
     }
 
@@ -24,14 +24,24 @@ class Login extends Component{
             email:this.state.email,
             password:this.state.password
         }
-        console.log(data)
-        axios.post('http://localhost:4000/login',data)
+        // console.log(data)
+        axios
+            .post('http://localhost:4000/login',data)
             .then(res => {
                 this.setState({
                     email:'',
                     password:''
                 })
-                this.props.history.push('/');
+                if(res.data.msg === "Success"){
+                    window.location = '/addBook'
+                }
+                else if(res.data.msg === "Invalid Password"){
+                    window.location = '/';
+                }
+                else{
+                    window.location = '/';
+                }
+                // this.props.history.push('/');
             })
             .catch(err => {
                 console.log("Error in login Post !")
@@ -67,7 +77,7 @@ class Login extends Component{
                         <img className="rounded-t-2xl w-full md:rounded-l-2xl" src="https://cdn.dribbble.com/users/926537/screenshots/4502924/python-2.gif" alt="Developer-Gif"></img>
                     </div>
                     <div className="flex h-3/5 md:flex md:h-full lg:w-1/2 justify-center items-center rounded-b-2xl bg-blue-50 md:rounded-r-2xl">
-                        <form className="md:w-1/2 md:align-center" onSubmit={this.onSubmit} method="post">
+                        <form className="md:w-1/2 md:align-center" onSubmit={this.onSubmit} >
                         <h2 className="flex justify-center mb-9 font-KaushanScript text-4xl">SIGN IN</h2>
                             <div className="flex justify-center mt-2">
                                 <input className="pt-2 pb-2 pr-4 pl-4 w-full rounded-2xl outline-none" type="email" placeholder="E-mail" name="email" value={this.state.email} onChange={this.onChange}></input>

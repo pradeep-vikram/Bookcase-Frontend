@@ -9,7 +9,7 @@ class Login extends Component{
         this.state={
             email:'',
             password:'',
-            isAuth:false
+            register:false
         }
     }
 
@@ -29,11 +29,12 @@ class Login extends Component{
             .post('http://localhost:4000/login',data)
             .then(res => {
                 this.setState({
+                    name:'',
                     email:'',
                     password:''
                 })
                 if(res.data.msg === "Success"){
-                    window.location = '/addBook'
+                    window.location = '/home'
                 }
                 else if(res.data.msg === "Invalid Password"){
                     window.location = '/';
@@ -46,6 +47,40 @@ class Login extends Component{
             .catch(err => {
                 console.log("Error in login Post !")
             })
+    }
+    registeronSubmit = event => {
+        event.preventDefault();
+
+        const data = {
+            name:this.state.name,
+            email:this.state.email,
+            password:this.state.password
+        }
+        axios
+            .post('http://localhost:4000/register',data)
+            .then(res => {
+                this.setState({
+                    name:'',
+                    email:'',
+                    password:''
+                })
+                if(res.data.msg === "Success"){
+                    window.location = '/'
+                }
+                // else{
+                //     window.location = '/';
+                // }
+                // this.props.history.push('/');
+            })
+            
+            .catch(err => {
+                console.log("Error in Register Post !")
+            })
+    }
+
+    onClick = event => {
+        event.preventDefault();
+        this.setState({register:true})
     }
 
     render(){
@@ -76,18 +111,40 @@ class Login extends Component{
                     <div className="flex h-2/5 lg:w-1/2 md:h-full items-stretch">
                         <img className="rounded-t-2xl w-full md:rounded-l-2xl" src="https://cdn.dribbble.com/users/926537/screenshots/4502924/python-2.gif" alt="Developer-Gif"></img>
                     </div>
-                    <div className="flex h-3/5 md:flex md:h-full lg:w-1/2 justify-center items-center rounded-b-2xl bg-blue-50 md:rounded-r-2xl">
+                    <div className="flex h-3/5 md:flex md:h-full lg:w-1/2 justify-center items-center rounded-b-2xl bg-blue-50 md:rounded-r-2xl" style={{display: this.state.register ? 'none' : 'flex' }}>
                         <form className="md:w-1/2 md:align-center" onSubmit={this.onSubmit} >
                         <h2 className="flex justify-center mb-9 font-KaushanScript text-4xl">SIGN IN</h2>
                             <div className="flex justify-center mt-2">
-                                <input className="pt-2 pb-2 pr-4 pl-4 w-full rounded-2xl outline-none" type="email" placeholder="E-mail" name="email" value={this.state.email} onChange={this.onChange}></input>
+                                <input className="pt-2 pb-2 pr-4 pl-4 w-full rounded-2xl outline-none" type="email" placeholder="E-mail" name="email" value={this.state.email} onChange={this.onChange} required></input>
                             </div>
                             <div className="flex justify-center mt-4">
-                                <input className="pt-2 pb-2 pr-4 pl-4 w-full rounded-2xl outline-none" type="password" placeholder="Password" name="password" value={this.state.password} onChange={this.onChange}></input>
+                                <input className="pt-2 pb-2 pr-4 pl-4 w-full rounded-2xl outline-none" type="password" placeholder="Password" name="password" value={this.state.password} onChange={this.onChange} required></input>
                             </div>
                             <div className="flex mt-6 justify-center w-1/2 m-auto self-center ">
-                                <button className="md:px-5 font-KaushanScript py-2 px-2 bg-white rounded-2xl" type="submit" >Go <FontAwesomeIcon icon={faArrowRight} size="1x" className="pl-1"/></button>
+                                <button className="md:px-5 font-KaushanScript py-2 px-2 bg-white rounded-2xl hover:bg-blue-500" type="submit" >Go <FontAwesomeIcon icon={faArrowRight} size="1x" className="pl-1"/></button>
                             </div>
+                            <div className="flex mt-6 justify-center w-1/2 m-auto self-center ">
+                                <button className="md:px-5 font-KaushanScript py-2 px-2 bg-blue-500 rounded-2xl" onClick={this.onClick} >Join For Free <FontAwesomeIcon icon={faArrowRight} size="1x" className="pl-1"/></button>
+                            </div>
+                        </form>
+                    </div>
+
+                    
+                    <div className="flex h-3/5 md:flex md:h-full lg:w-1/2 justify-center items-center rounded-b-2xl bg-blue-50 md:rounded-r-2xl" style={{display: this.state.register ? 'flex' : 'none' }}>
+                        <form className="md:w-1/2 md:align-center" onSubmit={this.registeronSubmit} >
+                            <h2 className="flex justify-center mb-9 font-KaushanScript text-4xl">SIGN UP</h2>
+                                <div className="flex justify-center mt-2">
+                                    <input className="pt-2 pb-2 pr-4 pl-4 w-full rounded-2xl outline-none" type="text" placeholder="Name" name="name" value={this.state.name} onChange={this.onChange} required></input>
+                                </div>
+                                <div className="flex justify-center mt-4">
+                                    <input className="pt-2 pb-2 pr-4 pl-4 w-full rounded-2xl outline-none" type="email" placeholder="E-mail" name="email" value={this.state.email} onChange={this.onChange} required></input>
+                                </div>
+                                <div className="flex justify-center mt-4">
+                                    <input className="pt-2 pb-2 pr-4 pl-4 w-full rounded-2xl outline-none" type="password" placeholder="Password" name="password" value={this.state.password} onChange={this.onChange} required></input>
+                                </div>
+                                <div className="flex mt-6 justify-center w-1/2 m-auto self-center ">
+                                    <button className="md:px-5 font-KaushanScript py-2 px-2 bg-white rounded-2xl" type="submit" >Start Now <FontAwesomeIcon icon={faArrowRight} size="1x" className="pl-1"/></button>
+                                </div>
                         </form>
                     </div>
                 </div>
